@@ -1,0 +1,18 @@
+{
+  "name": "psrxjs5",
+  "version": "1.0.0",
+  "description": "A simple Angular application that explores the capabilities of RxJS",
+  "scripts": {},
+  "author": "Dalton Whyte",
+  "license": "MIT",
+  "dependencies": {
+    "rxjs": "^6.4.0"
+  },
+  "devDependencies": {
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.3.3",
+    "typings": "^2.1.1",
+    "webpack": "^4.29.5",
+    "webpack-server": "^0.1.2"
+  }
+}
