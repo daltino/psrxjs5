@@ -1,5 +1,15 @@
-import { fromEvent, Subject, Observable } from "rxjs";
-import { flatMap } from "rxjs/operators";
+import { fromEvent, Subject, Observable, interval } from "rxjs";
+import {
+  flatMap,
+  take,
+  multicast,
+  refCount,
+  publish,
+  share,
+  publishLast,
+  publishBehavior,
+  publishReplay
+} from "rxjs/operators";
 import { load, loadWithFetch } from "./loader";
 
 //#region load and loadFetch
@@ -38,22 +48,56 @@ click
 
 //#region Using subjects and Multicasted Observables
 
-let subject$ = new Subject();
+// let subject$ = new Subject();
 
-subject$.subscribe(
-  value => console.log(`Observer 1: ${value}`) 
+// subject$.subscribe(
+//   value => console.log(`Observer 1: ${value}`)
+// );
+
+// subject$.subscribe(
+//   value => console.log(`Observer 2: ${value}`)
+// );
+
+// subject$.next('Hello!');
+
+// let source$ = new Observable(subscriber => {
+//   subscriber.next('Greetings!');
+// });
+
+// source$.subscribe(subject$);
+
+let source$ = interval(1000).pipe(
+  take(4),
+  // multicast(new Subject()),
+  // publish(),
+  // publishLast(),
+  // publishBehavior(42),
+  publishReplay(),
+  refCount()
+  // share()
 );
 
-subject$.subscribe(
-  value => console.log(`Observer 2: ${value}`)
-);
+// let subject$ = new Subject();
+// source$.subscribe(subject$);
 
-subject$.next('Hello!');
+source$.subscribe(value => console.log(`Observer 1: ${value}`));
 
-let source$ = new Observable(subscriber => {
-  subscriber.next('Greetings!');
-});
+setTimeout(() => {
+  source$.subscribe(value => console.log(`Observer 2: ${value}`));
+}, 1000);
 
-source$.subscribe(subject$);
+setTimeout(() => {
+  source$.subscribe(value => console.log(`Observer 3: ${value}`));
+}, 2000);
+
+setTimeout(() => {
+  source$.subscribe(
+    value => console.log(`Observer 4: ${value}`), 
+    null, 
+    () => console.log("Observer 4 completed.")
+  );
+}, 4500);
+
+// source$.connect();
 
 //#endregion
