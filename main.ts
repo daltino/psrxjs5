@@ -91,10 +91,8 @@ setTimeout(() => {
 }, 2000);
 
 setTimeout(() => {
-  source$.subscribe(
-    value => console.log(`Observer 4: ${value}`), 
-    null, 
-    () => console.log("Observer 4 completed.")
+  source$.subscribe(value => console.log(`Observer 4: ${value}`), null, () =>
+    console.log("Observer 4 completed.")
   );
 }, 4500);
 
