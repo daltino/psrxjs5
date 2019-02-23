@@ -1,7 +1,8 @@
-import { fromEvent } from "rxjs";
+import { fromEvent, Subject, Observable } from "rxjs";
 import { flatMap } from "rxjs/operators";
-
 import { load, loadWithFetch } from "./loader";
+
+//#region load and loadFetch
 
 let output = document.getElementById("output");
 let button = document.getElementById("button");
@@ -16,7 +17,7 @@ function renderMovies(movies) {
   });
 }
 
-let subscription = load("moviess.json").subscribe(
+let subscription = load("movies.json").subscribe(
   renderMovies,
   e => console.error(`error: ${e}`),
   () => console.log("complete")
@@ -32,3 +33,27 @@ click
     e => console.log(`error: ${e}`),
     () => console.log("complete")
   );
+
+//#endregion
+
+//#region Using subjects and Multicasted Observables
+
+let subject$ = new Subject();
+
+subject$.subscribe(
+  value => console.log(`Observer 1: ${value}`) 
+);
+
+subject$.subscribe(
+  value => console.log(`Observer 2: ${value}`)
+);
+
+subject$.next('Hello!');
+
+let source$ = new Observable(subscriber => {
+  subscriber.next('Greetings!');
+});
+
+source$.subscribe(subject$);
+
+//#endregion
